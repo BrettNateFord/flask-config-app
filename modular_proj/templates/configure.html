@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configure Parsing Rules</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Including the Navbar-->
+    {% include 'navbar.html' %} 
+    
+    <div class="container">
+        <h1 class="mt-4">Configure Parsing Rules</h1>
+        {% if parsing_rules_message %}
+        <div class="alert alert-info" role="alert">
+            {{ parsing_rules_message }}
+        </div>
+        {% endif %}
+        
+        <div class="row">
+            <div class="col-md-6">
+                <h2 class="mt-4">Existing Parsing Rules</h2>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Sentence Type</th>
+                            <th>Field</th>
+                            <th>Index</th>
+                            <th>Actions</th> <!-- New column for Delete button -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sentence_type, fields in parsing_rules.items() %}
+                            {% for field, index in fields.items() %}
+                                <tr>
+                                    <td>{{ sentence_type }}</td>
+                                    <td>{{ field }}</td>
+                                    <td>{{ index }}</td>
+                                    <td>
+                                        <form method="POST" action="/delete_rule">
+                                            <input type="hidden" name="sentence_type" value="{{ sentence_type }}">
+                                            <input type="hidden" name="field" value="{{ field }}">
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="col-md-6">
+                <h2 class="mt-4">Add or Update Parsing Rule</h2>
+                <form method="POST">
+                    <div class="form-group">
+                        <label for="sentence_type">Sentence Type:</label>
+                        <input type="text" class="form-control" id="sentence_type" name="sentence_type" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="field">Field:</label>
+                        <input type="text" class="form-control" id="field" name="field" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="index">Index:</label>
+                        <input type="number" class="form-control" id="index" name="index" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS (optional, if needed) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

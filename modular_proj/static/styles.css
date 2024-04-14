@@ -1,0 +1,51 @@
+/* styles.css */
+.navbar-light {
+    background-color: #ffffff; /* White background */
+}
+.navbar-light .navbar-nav .nav-link {
+    color: #ff8800; /* Orange text color for links */
+}
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #ffbb33; /* Orange hover color for links */
+}
+
+/* Body styles */
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Container styles */
+.container {
+    margin-top: 50px;
+}
+
+/* Heading styles */
+h1, h2 {
+    color: #333;
+}
+
+/* Form styles */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Table styles */
+.table th, .table td {
+    vertical-align: middle;
+}
+
+/* Button styles */
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+/* Alert styles */
+.alert {
+    margin-top: 20px;
+}

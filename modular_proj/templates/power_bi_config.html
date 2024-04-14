@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power BI Configuration</title>
+    <!-- Add Bootstrap CSS link here -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* Add the CSS style here */
+        .form-group input {
+            height: 38px; /* Set a fixed height for the form fields */
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Including the Navbar-->
+    {% include 'navbar.html' %} 
+    <div class="container">
+        <h1 class="mt-4">Power BI Configuration</h1>
+        <div class="form-container">
+            <form method="POST">
+                <div class="form-group">
+                    <label for="api_endpoint">API Endpoint URL:</label>
+                    <input type="text" class="form-control" id="api_endpoint" name="api_endpoint" value="{{ config_data.api_endpoint | default('') }}">
+                </div>
+                <div class="form-group">
+                    <label for="client_id">Client ID:</label>
+                    <input type="text" class="form-control" id="client_id" name="client_id" value="{{ config_data.client_id | default('') }}">
+                </div>
+                <div class="form-group">
+                    <label for="client_secret">Client Secret:</label>
+                    <input type="text" class="form-control" id="client_secret" name="client_secret" value="{{ config_data.client_secret | default('') }}">
+                </div>
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" class="form-control" id="username" name="username" value="{{ config_data.username | default('') }}">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" class="form-control" id="password" name="password" value="{{ config_data.password | default('') }}">
+                </div>
+                <div class="form-group">
+                    <label for="workspace_id">Workspace ID:</label>
+                    <input type="text" class="form-control" id="workspace_id" name="workspace_id" value="{{ config_data.workspace_id | default('') }}">
+                </div>
+                <div class="form-group">
+                    <label for="dataset_name">Dataset Name:</label>
+                    <input type="text" class="form-control" id="dataset_name" name="dataset_name" value="{{ config_data.dataset_name | default('') }}">
+                </div>
+                <!-- Edit button to toggle visibility of form -->
+                <button type="button" class="btn btn-primary btn-block" id="edit-btn">Edit</button>
+
+                <!-- Submit button to submit the form -->
+                <button type="submit" class="btn btn-primary btn-block">Save Configuration</button>
+            </form>
+        </div>
+    </div>
+
+        <!-- Add Bootstrap JS and jQuery script links here -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+        <script>
+// Script to enable form editing and change button text
+document.addEventListener('DOMContentLoaded', function () {
+    var form = document.querySelector('form'); // Select the form element
+    var editBtn = document.getElementById('edit-btn');
+
+    // Function to toggle form field state (read-only/editable)
+    function toggleFormFields(state) {
+        var formFields = form.querySelectorAll('input[type="text"], input[type="password"]');
+        formFields.forEach(function (field) {
+            field.readOnly = state; // Set readonly attribute based on state
+        });
+    }
+
+    // Initially disable form fields
+    toggleFormFields(true);
+
+    editBtn.addEventListener('click', function () {
+        // Toggle form field state when edit button is clicked
+        var isEditable = (editBtn.textContent === 'Edit');
+        toggleFormFields(isEditable);
+
+        // Change button text based on form editing state
+        editBtn.textContent = isEditable ? 'Save' : 'Edit';
+
+        // If switching to edit mode, focus on the first form field
+        if (isEditable) {
+            form.querySelector('input').focus();
+        }
+    });
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        // Collect form data
+        var formData = new FormData(form);
+        var jsonData = {};
+        formData.forEach(function (value, key) {
+            jsonData[key] = value || ""; // Set empty string if value is falsy
+        });
+
+        // Send JSON data to server using fetch API
+        fetch('/power_bi_config', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonData)
+        }).then(function (response) {
+            if (response.ok) {
+                console.log('Configuration saved successfully.');
+            } else {
+                console.error('Failed to save configuration.');
+            }
+        }).catch(function (error) {
+            console.error('Error:', error);
+        });
+    });
+});
+
+        </script>
+        
+</body>
+</html>

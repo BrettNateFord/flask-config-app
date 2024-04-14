@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Parsed NMEA Data</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Optionally, include custom CSS for further styling -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Including the Navbar-->
+    {% include 'navbar.html' %} 
+    
+    <div class="container mt-3">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">Parsed NMEA Data</h1>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Sentence Type</th>
+                            <th>Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in parsed_data %}
+                            <tr>
+                                <td>{{ item['type'] }}</td>
+                                <td>{{ item['data'] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
